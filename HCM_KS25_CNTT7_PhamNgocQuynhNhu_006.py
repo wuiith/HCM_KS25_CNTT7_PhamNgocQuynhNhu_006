@@ -206,20 +206,54 @@ def found_room():
     if not rent_list:
         print('Hiện tại danh sách đặt phòng đang trống!')
     else:
-        found = True
-        user_id_input = input('Nhập mã định danh (Booking ID) cần gia hạn thêm giờ: ').strip().upper()
-        for value in rent_list:
-            if value['id'] != user_id_input:
-                print('Mã đặt phòng hiện không tồn tại!')
-                found = False
-        
-        if found:
-            print('--- THÔNG TIN LỊCH ĐẶT ---')
-            for infor in rent_list:
-                if infor['id'] == user_id_input:
-                    print(f'{infor['id']:<5} | {infor['name_sign_in']:<15} | {infor['name_user']:<15} | {infor['time_start']:<3} | {infor['time_end']:<3} | {infor['total_time']:<3} | {infor['status']} ')
-                print('-'*85)
-    
+        while True:
+            print('1. Tìm kiếm dựa trên ID (chính xác theo ID)')
+            print('2. Tìm kiểu gần đúng theo Tên phòng họp')
+            print('3. Thoát chức năng')
+            user = input('Nhập lựa chọn của bạn')
+
+            if not user.isdigit():
+                print('Bạn phải nhập vào số nguyên 1 hay 2')
+                continue
+
+            if int(user) != 1 and int(user) != 2:
+                print('Bạn chỉ được phép nhập 1 hoặc 2')
+                continue
+
+            match user:
+                case "1":
+                    found = True
+                    user_id_input = input('Nhập mã định danh (Booking ID) cần gia hạn thêm giờ: ').strip().upper()
+                    for value in rent_list:
+                        if value['id'] != user_id_input:
+                            print('Mã đặt phòng hiện không tồn tại!')
+                            found = False
+                    
+                    if found:
+                        print('--- THÔNG TIN LỊCH ĐẶT ---')
+                        print('-'*85)
+                        for infor in rent_list:
+                            if infor['id'] == user_id_input:
+                                print(f'{infor['id']:<5} | {infor['name_sign_in']:<15} | {infor['name_user']:<15} | {infor['time_start']:<3} | {infor['time_end']:<3} | {infor['total_time']:<3} | {infor['status']} ')
+                            print('-'*85)
+
+                case "2":
+                    print('--- THÔNG TIN LỊCH ĐẶT ---')
+                    print('-'*85)
+                    user_input = input('Nhập tên phòng họp: ').strip().lower()
+                    for value in rent_list:
+                        if user_input.lower() in value['name_sign_in'.lower()]:
+                            for infor in rent_list:
+                                print(f'{infor['id']:<5} | {infor['name_sign_in']:<15} | {infor['name_user']:<15} | {infor['time_start']:<3} | {infor['time_end']:<3} | {infor['total_time']:<3} | {infor['status']} ')
+                            print('-'*85)
+                        else:
+                            print('Tên phòng ban không tồn tại!')
+                    
+                case "3":
+                    print('Thoát chức năng...')
+                    break
+
+
 
 def menu():
     while True:
@@ -250,6 +284,9 @@ def menu():
 
             case 3:
                 update_information_booking()
+
+            case 5:
+                found_room()
 
             case 8:
                 print('Thoát chương trình..')
