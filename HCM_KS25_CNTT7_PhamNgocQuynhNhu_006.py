@@ -120,88 +120,90 @@ def update_information_booking():
     if not rent_list:
         print('Hiện tại danh sách đặt phòng đang trống!')
     else:
-        found = True
-        user_id_input = input('Nhập mã định danh (Booking ID) cần gia hạn thêm giờ: ').strip().upper()
-        for value in rent_list:
-            if value['id'] != user_id_input:
-                print('Mã đặt phòng hiện không tồn tại!')
-                found = False
+        while True:
+            found = True
+            user_id_input = input('Nhập mã định danh (Booking ID) cần gia hạn thêm giờ: ').strip().upper()
+            for value in rent_list:
+                if value['id'] != user_id_input:
+                    print('Mã đặt phòng hiện không tồn tại!')
+                    found = False
+                    continue
         
-        if found:
-            while True: 
+            if found:
+                while True: 
+                    check_empty = False
+                    name_sign_in = input('Vui lòng nhập lại tên phòng đăng ký: ').strip().title()
+                    if name_sign_in == '':
+                        print('Tên phòng đăng ký không được bỏ trống! Vui lòng nhập lại')
+                        check_empty = True
+                        continue
+                    
+                    if not check_empty:
+                        break
+
+            while True:
                 check_empty = False
-                name_sign_in = input('Vui lòng nhập lại tên phòng đăng ký: ').strip().title()
-                if name_sign_in == '':
-                    print('Tên phòng đăng ký không được bỏ trống! Vui lòng nhập lại')
+                time_start = input('Nhập thời gian bắt đầu sử dụng: ')
+                if time_start == '':
+                    print('Thời gian bắt đầu sử dụng không được bỏ trống! Vui lòng nhập lại')
                     check_empty = True
                     continue
                 
+                if not time_start.isdigit():
+                    print('Bạn phải nhập số nguyên!')
+                    continue
+
+                if int(time_start) < 0 and int(time_start) > 24:
+                    print('Số giờ phải từ 1h-24h')
+                    continue
+
                 if not check_empty:
                     break
-
-        while True:
-            check_empty = False
-            time_start = input('Nhập thời gian bắt đầu sử dụng: ')
-            if time_start == '':
-                print('Thời gian bắt đầu sử dụng không được bỏ trống! Vui lòng nhập lại')
-                check_empty = True
-                continue
             
-            if not time_start.isdigit():
-                print('Bạn phải nhập số nguyên!')
-                continue
-
-            if int(time_start) < 0 and int(time_start) > 24:
-                print('Số giờ phải từ 1h-24h')
-                continue
-
-            if not check_empty:
-                break
-        
-        
-        while True:
-            check_empty = False
-            time_end = input('Nhập thời gian sử dụng kết thúc: ')
-            if time_end == '':
-                print('Thời gian sử dụng kết thúc không được bỏ trống! Vui lòng nhập lại')
-                check_empty = True
-                continue
-
-            if not time_end.isdigit():
-                print('Bạn phải nhập số nguyên!')
-                continue
-
-            if int(time_end) < 0 and int(time_end) > 24:
-                print('Số giờ phải từ 1h-24h')
-                continue
-
-            if int(time_end) < int(time_end):
-                print('Thời gian kết thúc không thể sớm hơn thời gian bắt đầu!')
-                continue
-
-            if not check_empty:
-                break
-        
-        total_time = int(time_end) - int(time_start)
-
-    
-        if total_time < 2:
-            status = 'Ngắn'
-        elif total_time >= 2 and total_time < 4:
-            status = 'Tiêu chuẩn'
-        elif total_time >= 4 and total_time < 6:
-            status = 'Dài'
-        else:
-            status = 'Quá tải (Cần xem xét lại)'
-
-        for value in rent_list:
-            value['name_sign_in'] = name_sign_in
-            value['time_start'] = time_start
-            value['time_end'] = time_end
-            value['total_time'] = total_time
-            value['status'] = status
-
             
+            while True:
+                check_empty = False
+                time_end = input('Nhập thời gian sử dụng kết thúc: ')
+                if time_end == '':
+                    print('Thời gian sử dụng kết thúc không được bỏ trống! Vui lòng nhập lại')
+                    check_empty = True
+                    continue
+
+                if not time_end.isdigit():
+                    print('Bạn phải nhập số nguyên!')
+                    continue
+
+                if int(time_end) < 0 and int(time_end) > 24:
+                    print('Số giờ phải từ 1h-24h')
+                    continue
+
+                if int(time_end) < int(time_end):
+                    print('Thời gian kết thúc không thể sớm hơn thời gian bắt đầu!')
+                    continue
+
+                if not check_empty:
+                    break
+            
+            total_time = int(time_end) - int(time_start)
+
+        
+            if total_time < 2:
+                status = 'Ngắn'
+            elif total_time >= 2 and total_time < 4:
+                status = 'Tiêu chuẩn'
+            elif total_time >= 4 and total_time < 6:
+                status = 'Dài'
+            else:
+                status = 'Quá tải (Cần xem xét lại)'
+
+            for value in rent_list:
+                value['name_sign_in'] = name_sign_in
+                value['time_start'] = time_start
+                value['time_end'] = time_end
+                value['total_time'] = total_time
+                value['status'] = status
+
+                
 def found_room():
     if not rent_list:
         print('Hiện tại danh sách đặt phòng đang trống!')
